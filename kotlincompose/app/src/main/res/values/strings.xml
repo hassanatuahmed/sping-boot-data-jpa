@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">kotlin-compose</string>
+    <string name="birthday_message">Happy Birthday AGM!</string>
+    <string name="from">-from hassana</string>
+</resources>
