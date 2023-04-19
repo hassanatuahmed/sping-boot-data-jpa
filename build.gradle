@@ -1,0 +1,74 @@
+
+
+buildscript {
+    ext {
+        springBootVersion     = "2.1.0.RELEASE"
+        gradleDockerVersion   = "1.2"
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("se.transmode.gradle:gradle-docker:${gradleDockerVersion}")
+    }
+}
+
+plugins {
+    id "com.palantir.docker" version "0.22.1"
+}
+plugins {
+    id "org.springframework.boot" version "2.1.0.RELEASE"
+}
+
+plugins {
+    id 'java'
+}
+
+apply plugin: "java"
+apply plugin: "application"
+apply plugin: "eclipse"
+apply plugin: "org.springframework.boot"
+
+
+
+group = 'myorg'
+springBoot {
+    mainClassName = 'ai.openfabric.api'
+}
+bootJar {
+   enabled = false
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'ai.openfabric.api.Aplication'
+        )
+    }
+}
+
+task unpack(type: Copy) {
+    dependsOn bootJar
+    from(zipTree(tasks.bootJar.outputs.files.singleFile))
+    into("build/dependency")
+}
+docker {
+    name "${project.group}/${bootJar.baseName}"
+    copySpec.from(tasks.unpack.outputs).into("dependency")
+    buildArgs(['DEPENDENCY': "dependency"])
+}
+
+
+repositories {
+    maven { url "https://maven.openfabric.ai/releases" }
+    mavenCentral()
+    mavenLocal()
+}
+
+
+
+test {
+    useJUnitPlatform()
+}
+
