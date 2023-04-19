@@ -1,2 +1,5 @@
-package com.example.blogapi.service;public interface AuthService {
+package com.example.blogapi.service;
+
+public interface AuthService {
+
 }

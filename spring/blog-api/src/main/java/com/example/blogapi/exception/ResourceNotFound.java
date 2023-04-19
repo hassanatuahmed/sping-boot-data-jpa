@@ -1,2 +1,20 @@
-package com.example.blogapi.exception;public class ResourceNotFound {
+package com.example.blogapi.exception;
+
+import lombok.Data;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@Data
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class ResourceNotFound extends RuntimeException{
+    private String resourceName;
+    private String fieldName;
+    private Long fieldValue;
+
+    public ResourceNotFound(String resourceName, String fieldName, Long fieldValue) {
+        super(String.format("% Resource not found",resourceName,fieldName,fieldValue));
+        this.resourceName = resourceName;
+        this.fieldName = fieldName;
+        this.fieldValue = fieldValue;
+    }
 }
